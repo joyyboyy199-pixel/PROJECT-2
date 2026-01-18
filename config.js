@@ -1,7 +1,10 @@
 const CONFIG = {
-    // LINK IKLAN BANNER (ATAS)
+    // Ad Placement Key
     adKey: "fee74d02816fa33c6ddff98e6df77ccf",
     
-    // LINK TUJUAN SETELAH 3 DETIK
-    targetUrl: "https://playfloowz.com/c?a=439&o=13&sub1=NFL_NET"
+    // Final Destination URL
+    targetUrl: "https://playfloowz.com/c?a=439&o=13&sub1=NFL_NET",
+    
+    // Histats Analytics ID
+    histatsID: "4918623"
 };
