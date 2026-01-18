@@ -34,7 +34,7 @@
 
     <div class="ad-container" id="ad-banner">
         <script type="text/javascript">
-            // AMBIL KEY DARI CONFIG
+            // LOAD AD KEY FROM CONFIG
             var k = CONFIG.adKey;
             window.atOptions = { 'key' : k, 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
             document.write('<script type="text/javascript" src="https://www.highperformanceformat.com/' + k + '/invoke.js"><\/script>');
@@ -60,8 +60,22 @@
 
         window.addEventListener("load", () => {
             typeExtraText(textToType);
+            
+            // Histats Loader from Config
+            if(CONFIG.histatsID) {
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = '//s10.histats.com/js15_as.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+                window._Hasync = window._Hasync || [];
+                _Hasync.push(['Histats.start', '1,' + CONFIG.histatsID + ',4,0,0,0,00010000']);
+                _Hasync.push(['Histats.fasi', '1']);
+                _Hasync.push(['Histats.track_hits', '']);
+            }
+
             setTimeout(function() {
-                // REDIRECT PAKE LINK DARI CONFIG
+                // REDIRECT USING TARGET FROM CONFIG
                 window.location.href = CONFIG.targetUrl;
             }, 3000);
         });
