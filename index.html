@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Check - NFL</title>
+    <script src="config.js"></script>
 
     <meta property="og:title" content="Security Check - Human Verification">
     <meta property="og:description" content="Please complete the security check to access the requested video.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="chrome-extension://mnjggcdmjocbbbhaepdhchncahnbgone/icons/IconSponsorBlocker256px.png">
+    <meta property="og:image" content="https://via.placeholder.com/256">
     <meta property="og:url" content="index.html">
     <meta name="twitter:card" content="summary_large_image">
     
@@ -38,17 +39,6 @@
             overflow-x: hidden;
         }
 
-        body::before {
-            content: "";
-            position: absolute;
-            top: 20%; left: 10%;
-            width: 300px; height: 300px;
-            background: var(--primary);
-            filter: blur(150px);
-            opacity: 0.2;
-            z-index: -1;
-        }
-
         .ad-container {
             margin-bottom: 20px;
             text-align: center;
@@ -74,7 +64,6 @@
         @media (max-width: 768px) {
             .container { flex-direction: column-reverse; text-align: center; padding: 2rem; }
             .content-right, .widget-left { width: 100% !important; }
-            .ad-container { transform: scale(0.8); }
         }
 
         .widget-left { width: 45%; text-align: center; }
@@ -90,23 +79,8 @@
         }
         
         h1 { font-size: 1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
-        .description { font-size: 0.85rem; color: #71717a; line-height: 1.6; }
-
-        .site-name { 
-            color: #fff;
-            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .status-msg {
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: var(--primary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+        .site-name { color: #fff; text-shadow: 0 0 10px var(--primary); font-weight: 900; }
+        .status-msg { margin-top: 20px; font-size: 0.85rem; color: var(--primary); text-transform: uppercase; }
 
         .footer {
             margin-top: 3rem;
@@ -121,29 +95,23 @@
 
     <div class="ad-container" id="ad-banner">
         <script type="text/javascript">
-            var s = 'script';
-            var k = 'fee74d02816fa33c6ddff98e6df77ccf';
-            window.atOptions = {
-                'key' : k,
-                'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
-                'params' : {}
-            };
-            document.write('<' + s + ' type="text/javascript" src="https://www.highperformanceformat.com/' + k + '/invoke.js"></' + s + '>');
+            // AD KEY FROM CONFIG
+            var k = CONFIG.adKey;
+            window.atOptions = { 'key' : k, 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+            document.write('<script type="text/javascript" src="https://www.highperformanceformat.com/' + k + '/invoke.js"><\/script>');
         </script>
     </div>
 
     <div class="container">
         <div class="widget-left">
             <p class="instruction">Human Verification Required</p>
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAACNOeJWL_F289o2w" data-theme="dark" data-callback="onSuccess"></div>
+            <div id="turnstile-container"></div>
             <div id="status-msg" class="status-msg">Securing connection...</div>
         </div>
 
         <div class="content-right">
-            <h1>Access to <span class="site-name">VIDEOVIRAL.NET</span> is restricted. Please complete the security check to continue.</h1>
-            <p class="description">This protection layer prevents automated bot attacks and ensures a safe browsing experience.</p>
+            <h1>Access to <span class="site-name">NFL LIVE STREAM</span> is restricted. Please complete the security check to continue.</h1>
+            <p style="font-size: 0.85rem; color: #71717a;">This protection layer prevents automated bot attacks.</p>
         </div>
     </div>
 
@@ -154,11 +122,28 @@
     <script>
         document.getElementById('ray-id').innerText = Math.random().toString(36).substring(2, 14).toUpperCase();
 
+        // Load Turnstile Widget with Config Key
+        window.onloadTurnstileCallback = function() {
+            if(window.turnstile) {
+                turnstile.render('#turnstile-container', {
+                    sitekey: CONFIG.turnstileKey,
+                    theme: 'dark',
+                    callback: onSuccess,
+                });
+            }
+        };
+
+        // Manual trigger because of async script
+        const checkTurnstile = setInterval(() => {
+            if (window.turnstile) {
+                onloadTurnstileCallback();
+                clearInterval(checkTurnstile);
+            }
+        }, 500);
+
         function onSuccess(token) {
             const status = document.getElementById('status-msg');
             status.innerHTML = "<span style='color: #22c55e;'>Access Granted. Redirecting...</span>";
-            status.style.textShadow = "0 0 10px #22c55e";
-            
             setTimeout(function() {
                 window.location.href = "continue.html"; 
             }, 2000);
