@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redirecting...</title>
+    <script src="config.js"></script>
+
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Courier New', monospace;
+            background-color: #000; color: #0ff;
+            overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+        }
+        .ad-container { margin-bottom: 20px; text-align: center; min-height: 90px; }
+        .container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 40px; border-radius: 15px;
+            box-shadow: 0 0 20px #0ff; width: 80%; max-width: 500px; text-align: center;
+        }
+        .loading-text { font-size: 32px; font-weight: bold; color: #0ff; text-shadow: 0 0 10px #0ff, 0 0 20px #0ff; animation: shimmer 2s infinite; }
+        @keyframes shimmer { 0% { text-shadow: 0 0 10px #0ff; } 50% { text-shadow: 0 0 30px #0ff; } 100% { text-shadow: 0 0 10px #0ff; } }
+        .dot-flash::after { content: ''; display: inline-block; width: 8px; height: 8px; background-color: #0ff; border-radius: 50%; animation: blink 1s infinite; margin-left: 8px; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .progress-bar { width: 100%; background: rgba(0, 255, 255, 0.1); height: 10px; border-radius: 5px; overflow: hidden; margin-top: 20px; }
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #0ff, #08f); animation: fill 3s forwards; }
+        @keyframes fill { 0% { width: 0%; } 100% { width: 100%; } }
+        .typed-info { font-size: 20px; color: #0ff; text-shadow: 0 0 5px #0ff; margin-top: 30px; white-space: pre-wrap; min-height: 28px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div class="ad-container" id="ad-banner">
+        <script type="text/javascript">
+            // AMBIL KEY DARI CONFIG
+            var k = CONFIG.adKey;
+            window.atOptions = { 'key' : k, 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+            document.write('<script type="text/javascript" src="https://www.highperformanceformat.com/' + k + '/invoke.js"><\/script>');
+        </script>
+    </div>
+
+    <div class="container">
+        <div class="loading-text">Please wait<span class="dot-flash"></span></div>
+        <div class="progress-bar"><div class="progress-bar-fill"></div></div>
+        <div id="typedText" class="typed-info"></div>
+    </div>
+
+    <script>
+        const textToType = "Establishing secure connection...\nRedirecting to destination.";
+        const typedTextEl = document.getElementById("typedText");
+        
+        function typeExtraText(text, i = 0) {
+            if (i < text.length) {
+                typedTextEl.textContent += text.charAt(i);
+                setTimeout(() => typeExtraText(text, i + 1), 40);
+            }
+        }
+
+        window.addEventListener("load", () => {
+            typeExtraText(textToType);
+            setTimeout(function() {
+                // REDIRECT PAKE LINK DARI CONFIG
+                window.location.href = CONFIG.targetUrl;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
