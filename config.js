@@ -1,4 +1,6 @@
 const CONFIG = {
+    // Cloudflare Turnstile Site Key
+    turnstileKey: "0x4AAAAAACNOeJWL_F289o2w",
     // Ad Placement Key
     adKey: "fee74d02816fa33c6ddff98e6df77ccf",
     
